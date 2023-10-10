@@ -28,3 +28,6 @@ spring:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
         ddl-auto: none
+
+values:
+  baseUrl: 127.0.0.1:8080
