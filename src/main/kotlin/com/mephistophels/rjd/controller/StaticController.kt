@@ -2,6 +2,7 @@ package com.mephistophels.rjd.controller
 
 import com.mephistophels.rjd.errors.ResourceNotFoundException
 import com.mephistophels.rjd.service.StorageManager
+import com.mephistophels.rjd.util.API_PUBLIC
 import org.springframework.core.io.InputStreamResource
 import org.springframework.http.ContentDisposition
 import org.springframework.http.HttpHeaders
@@ -10,13 +11,11 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.servlet.function.ServerResponse
 import java.io.File
-import java.nio.charset.StandardCharsets
 import java.util.*
 
 @RestController
-@RequestMapping("API_VERSION_1/upload")
+@RequestMapping("$API_PUBLIC/upload")
 class StaticController(
     private val manager: StorageManager
 ) {

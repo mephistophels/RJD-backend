@@ -4,6 +4,7 @@ import com.mephistophels.rjd.errors.ApiError
 import com.mephistophels.rjd.errors.UnsupportedFileTypeException
 import com.mephistophels.rjd.model.enums.PhotoPath
 import com.mephistophels.rjd.service.StorageManager
+import com.mephistophels.rjd.util.API_PUBLIC
 import com.mephistophels.rjd.util.API_VERSION_1
 import com.mephistophels.rjd.util.createIfNotExist
 
@@ -66,8 +67,7 @@ class StorageManagerImpl(
             )
     }
 
-    // TODO: !!! Change path
-    override fun getPhotoPath(path: String): String = "http://$baseUrl$API_VERSION_1/public/uploads/$path"
+    override fun getPhotoPath(path: String): String = "http://$baseUrl$API_PUBLIC/uploads/$path"
 
     override fun removeImage(path: String?, dir: PhotoPath): Boolean {
         if (path == null) return false
