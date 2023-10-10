@@ -1,0 +1,30 @@
+
+server:
+  port: 8080
+  forward-headers-strategy: framework
+
+spring:
+  security:
+    jwt:
+      secret: 6p7uqQ11A7sVybRQAtTKoSX6HOJOhMywRCPn6qjmfajgEyp9AJqPyIYBczVZ45LQPMTxx4yrOzPLqobyQmtsDCGZBS0xu03wG
+      access.lifetime: 1  # days
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/RJD?createIfNotExists=true
+    username: admin
+    password: password
+
+  jpa:
+    show-sql: true
+    format-sql: true
+    generate-ddl: true
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      ddl-auto: none
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        ddl-auto: none
