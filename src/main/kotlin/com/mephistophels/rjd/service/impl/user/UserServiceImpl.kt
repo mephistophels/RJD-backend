@@ -1,6 +1,8 @@
 package com.mephistophels.rjd.service.impl.user
 
+import com.mephistophels.rjd.database.entity.Tag
 import com.mephistophels.rjd.database.entity.User
+import com.mephistophels.rjd.database.repository.TagDao
 import com.mephistophels.rjd.database.repository.UserDao
 import com.mephistophels.rjd.errors.AlreadyExistsException
 import com.mephistophels.rjd.errors.ResourceNotFoundException
@@ -12,12 +14,14 @@ import com.mephistophels.rjd.service.UserService
 import org.springframework.context.annotation.Lazy
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 class UserServiceImpl(
     private val passwordEncoder: PasswordEncoder,
     private val mapper: UserMapper,
     private val dao: UserDao,
+    private val tagDao: TagDao,
 ) : UserService {
 
     override fun existByEmail(email: String): Boolean {
@@ -49,6 +53,12 @@ class UserServiceImpl(
         val user = mapper.asEntity(request).apply {
             hash = passwordEncoder.encode(request.password)
             dao.save(this)
+        }
+        for (tag in request.tag){
+            tagDao.save(Tag(tag.lowercase(Locale.getDefault())).apply { this.user = user })
+        }
+        user.apply {
+            this.tag = tagDao.findAllByUser(this)
         }
         return user
     }

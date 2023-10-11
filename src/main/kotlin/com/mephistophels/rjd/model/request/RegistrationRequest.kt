@@ -1,9 +1,11 @@
 package com.mephistophels.rjd.model.request
 
+import com.mephistophels.rjd.database.entity.Tag
 import com.mephistophels.rjd.util.EMAIL_REGEX
 import jakarta.validation.constraints.Pattern
 import java.time.LocalDate
 import jakarta.validation.constraints.Size
+import org.apache.tika.sax.CleanPhoneText
 
 class RegistrationRequest(
     @field:Pattern(regexp = EMAIL_REGEX)
@@ -19,5 +21,9 @@ class RegistrationRequest(
     val patronymic: String? = null,
     val birthday: LocalDate? = null,
     @field:Size(max = 3000)
-    var bio: String? = null
+    var bio: String? = null,
+    @field:Size(max = 11)
+    var phone: String,
+    var avatar: String,
+    var tag: Set<String>,
 )

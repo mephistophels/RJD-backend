@@ -4,8 +4,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class FreelancingApplication
+class RJDApplication
 
 fun main(args: Array<String>) {
-    runApplication<FreelancingApplication>(*args)
+    runApplication<RJDApplication>(*args)
 }

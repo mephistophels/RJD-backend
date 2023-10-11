@@ -12,4 +12,5 @@ open class UserResponse(
     val name: String,
     val patronymic: String? = null,
     val birthday: LocalDate? = null,
+    val tag: Set<String>,
 ): AbstractCreatedAtResponse(id, createdAt)

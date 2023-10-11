@@ -12,4 +12,5 @@ open class UserMediumResponse(
     patronymic: String? = null,
     birthday: LocalDate? = null,
     val bio: String? = null,
-) : UserResponse(id, createdAt, email, surname, name, patronymic, birthday)
+    tag: Set<String>,
+) : UserResponse(id, createdAt, email, surname, name, patronymic, birthday, tag)

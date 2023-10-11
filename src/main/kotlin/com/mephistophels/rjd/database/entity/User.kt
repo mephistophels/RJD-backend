@@ -1,9 +1,6 @@
 package com.mephistophels.rjd.database.entity
 
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.OneToMany
-import jakarta.persistence.Table
+import jakarta.persistence.*
 import java.time.LocalDate
 
 @Entity
@@ -11,6 +8,12 @@ import java.time.LocalDate
 class User(
     @Column(name = "email", nullable = false, unique = true)
     var email: String,
+
+    @Column(name = "phone", nullable = false)
+    var phone: String,
+
+    @Column(name = "avatar")
+    var avatar:String,
 
     @Column(name = "surname", nullable = false)
     var surname: String,
@@ -27,11 +30,20 @@ class User(
     @Column(name = "bio", nullable = true)
     var bio: String? = null,
 
-    @Column(name = "imageLink", nullable = true)
-    var link:String? = null
-
 ) : AbstractCreatedAtEntity() {
 
     @Column(name = "hash", nullable = false)
     var hash: String? = null
+
+    @OneToMany(mappedBy = "recipient", cascade = [CascadeType.ALL])
+    var receivedMark: Set<Mark> = HashSet<Mark>()
+
+    @OneToMany(mappedBy = "sender", cascade = [CascadeType.ALL])
+    var sentMark: Set<Mark> = HashSet<Mark>()
+
+    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL])
+    var tag: Set<Tag> = HashSet<Tag>()
+
+    @OneToMany(mappedBy = "holder", cascade = [CascadeType.ALL])
+    var companions: Set<Companion> = HashSet()
 }

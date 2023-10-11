@@ -12,4 +12,5 @@ class UserFullResponse(
     patronymic: String? = null,
     birthday: LocalDate? = null,
     bio: String? = null,
-) : UserMediumResponse(id, createdAt, email, surname, name, patronymic, birthday, bio)
+    tag: Set<String>
+) : UserMediumResponse(id, createdAt, email, surname, name, patronymic, birthday, bio, tag)

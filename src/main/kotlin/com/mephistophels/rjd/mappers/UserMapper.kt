@@ -18,7 +18,9 @@ class UserMapper {
             patronymic = request.patronymic,
             surname = request.surname,
             birthday = request.birthday,
-            bio = request.bio
+            bio = request.bio,
+            phone = request.phone,
+            avatar = request.avatar,
         )
     }
     fun asNullableResponse(entity: User?): UserResponse? {
@@ -26,6 +28,8 @@ class UserMapper {
     }
 
     fun asResponse(entity: User): UserResponse {
+        val res = mutableSetOf<String>()
+        for (tag in entity.tag) { res.add(tag.tag) }
         return UserResponse(
             id = entity.id,
             createdAt = entity.createdAt,
@@ -34,10 +38,13 @@ class UserMapper {
             patronymic = entity.patronymic,
             surname = entity.surname,
             birthday = entity.birthday,
+            tag = res,
         )
     }
 
     fun asUserFullResponse(entity: User) : UserFullResponse {
+        val res = mutableSetOf<String>()
+        for (tag in entity.tag) { res.add(tag.tag) }
         return UserFullResponse(
             id = entity.id,
             createdAt = entity.createdAt,
@@ -47,10 +54,14 @@ class UserMapper {
             surname = entity.surname,
             birthday = entity.birthday,
             bio = entity.bio,
+            tag = res,
+
         )
     }
 
     fun asUserMediumResponse(entity: User) : UserMediumResponse {
+        val res = mutableSetOf<String>()
+        for (tag in entity.tag) { res.add(tag.tag) }
         return UserMediumResponse(
             id = entity.id,
             createdAt = entity.createdAt,
@@ -60,6 +71,7 @@ class UserMapper {
             surname = entity.surname,
             birthday = entity.birthday,
             bio = entity.bio,
+            tag = res,
         )
     }
 }
