@@ -11,4 +11,6 @@ import org.springframework.stereotype.Repository
 @Repository
 interface CompanionDao : PagingAndSortingRepository<Companion, Long>, CrudRepository<Companion, Long> {
     fun findAllByHolder(holder: User, pageable: Pageable): Page<Companion>
+
+    fun findEntityById(id:Long): Companion?
 }
