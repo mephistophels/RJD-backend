@@ -10,5 +10,6 @@ import java.util.Optional
 interface UserDao : PagingAndSortingRepository<User, Long>, CrudRepository<User, Long> {
     fun findByEmail(email: String): Optional<User>
 
+    fun findEntityById(id: Long) : User
     fun existsByEmail(email: String): Boolean
 }

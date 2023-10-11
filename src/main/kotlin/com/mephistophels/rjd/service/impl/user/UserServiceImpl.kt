@@ -19,6 +19,7 @@ import com.mephistophels.rjd.model.response.user.CompanionResponse
 import com.mephistophels.rjd.model.response.user.UserFullResponse
 import com.mephistophels.rjd.model.response.user.UserMediumResponse
 import com.mephistophels.rjd.service.StorageManager
+import com.mephistophels.rjd.service.TicketService
 import com.mephistophels.rjd.service.UserService
 import com.mephistophels.rjd.util.getPrincipal
 import jakarta.servlet.http.Part
@@ -37,7 +38,8 @@ class UserServiceImpl(
     private val dao: UserDao,
     private val companionDao: CompanionDao,
     private val tagDao: TagDao,
-    private val storageManager: StorageManager
+    private val storageManager: StorageManager,
+    private val ticketService: TicketService,
 ) : UserService {
 
     override fun existByEmail(email: String): Boolean {

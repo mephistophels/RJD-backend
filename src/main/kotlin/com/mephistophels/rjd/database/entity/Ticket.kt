@@ -3,7 +3,9 @@ package com.mephistophels.rjd.database.entity
 import com.mephistophels.rjd.database.entity.common.AbstractCreatedAtEntity
 import com.mephistophels.rjd.database.entity.user.Companion
 import com.mephistophels.rjd.database.entity.user.User
+import com.mephistophels.rjd.model.enums.PhotoPath
 import jakarta.persistence.*
+import java.time.LocalDateTime
 import java.util.Date
 
 @Entity
@@ -11,7 +13,7 @@ import java.util.Date
 class Ticket(
 
     @Column(name = "date", nullable = false)
-    val date: Date,
+    val date: LocalDateTime,
 
     @Column(name = "trainNumber", nullable = false)
     val trainNumber: Long,
@@ -25,13 +27,13 @@ class Ticket(
     @Column(name = "carriageType", nullable = false)
     val carriageType: CarriageType,
 
-) : AbstractCreatedAtEntity() {
+    ) : AbstractCreatedAtEntity() {
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "userId")
     lateinit var user: User
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @ManyToOne(fetch = FetchType.EAGER, optional = true)
     @JoinColumn(name = "companionId")
-    lateinit var companion: Companion
+    var companion: Companion? = null
 }
