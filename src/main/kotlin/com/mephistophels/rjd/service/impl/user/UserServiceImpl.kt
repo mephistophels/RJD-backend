@@ -69,7 +69,9 @@ class UserServiceImpl(
 
     override fun createCompanion(request: CompanionRequest): CompanionResponse {
         val user = findEntityById(getPrincipal())
-        val companion = mapper.asEntity(request).also { companionDao.save(it) }
+        val companion = mapper.asEntity(request).apply {
+            this.holder = user
+        }.also { companionDao.save(it) }
         return mapper.asResponse(companion)
     }
 
