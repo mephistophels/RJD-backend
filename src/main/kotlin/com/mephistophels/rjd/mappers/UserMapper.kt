@@ -1,11 +1,15 @@
 package com.mephistophels.rjd.mappers
 
+import com.mephistophels.rjd.database.entity.Companion
 import com.mephistophels.rjd.database.entity.User
 import com.mephistophels.rjd.model.request.RegistrationRequest
+import com.mephistophels.rjd.model.request.user.CompanionRequest
+import com.mephistophels.rjd.model.response.common.PageResponse
+import com.mephistophels.rjd.model.response.user.CompanionResponse
 import com.mephistophels.rjd.model.response.user.UserFullResponse
 import com.mephistophels.rjd.model.response.user.UserMediumResponse
 import com.mephistophels.rjd.model.response.user.UserResponse
-import org.springframework.context.annotation.Lazy
+import org.springframework.data.domain.Page
 import org.springframework.stereotype.Component
 
 
@@ -72,6 +76,35 @@ class UserMapper {
             birthday = entity.birthday,
             bio = entity.bio,
             tag = res,
+        )
+    }
+
+    fun asResponse(entity: Companion): CompanionResponse {
+        return CompanionResponse(
+            id = entity.id,
+            createdAt = entity.createdAt,
+            surname = entity.surname,
+            name = entity.name,
+            patronymic = entity.patronymic,
+            birthday = entity.birthday,
+            phone = entity.phone,
+            bio = entity.bio,
+            avatar = entity.avatar
+        )
+    }
+
+    fun asPageResponse(page: Page<Companion>): PageResponse<CompanionResponse> {
+        return PageResponse.build(page, ::asResponse)
+    }
+
+    fun asEntity(request: CompanionRequest): Companion {
+        return Companion(
+            name = request.name,
+            patronymic = request.patronymic,
+            surname = request.surname,
+            birthday = request.birthday,
+            bio = request.bio,
+            phone = request.phone
         )
     }
 }

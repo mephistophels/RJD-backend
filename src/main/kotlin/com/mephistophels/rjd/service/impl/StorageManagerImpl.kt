@@ -29,7 +29,7 @@ class StorageManagerImpl(
 ) : StorageManager {
     override val root = Path("uploads").also { if (it.notExists()) Files.createDirectory(it) }
 
-    override fun saveImage(part: Part, dir: PhotoPath, oldPath: String?, isAdmin: Boolean): String {
+    override fun saveImage(part: Part, dir: PhotoPath, oldPath: String?): String {
         val extension = checkMime(part.inputStream)
         val filename = "${UUID.randomUUID()}.$extension"
 

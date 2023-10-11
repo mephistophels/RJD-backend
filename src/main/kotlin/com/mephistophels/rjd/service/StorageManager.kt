@@ -8,7 +8,7 @@ import java.nio.file.Path
 
 interface StorageManager {
     val root: Path
-    fun saveImage(part: Part, dir: PhotoPath, oldPath: String?, isAdmin: Boolean): String
+    fun saveImage(part: Part, dir: PhotoPath, oldPath: String?): String
     fun getPhotoFile(path: String): File
     fun getPhotoPath(path: String): String
     fun removeImage(path: String?, dir: PhotoPath): Boolean
