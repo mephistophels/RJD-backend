@@ -1,5 +1,8 @@
 package com.mephistophels.rjd.database.entity
 
+import com.mephistophels.rjd.database.entity.common.AbstractCreatedAtEntity
+import com.mephistophels.rjd.database.entity.user.Companion
+import com.mephistophels.rjd.database.entity.user.User
 import jakarta.persistence.*
 import java.util.Date
 
@@ -22,7 +25,7 @@ class Ticket(
     @Column(name = "carriageType", nullable = false)
     val carriageType: CarriageType,
 
-) :AbstractCreatedAtEntity() {
+) : AbstractCreatedAtEntity() {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "userId")

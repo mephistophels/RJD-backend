@@ -25,12 +25,12 @@ class MarkController(
         return service.createMark(request, userId)
     }
 
-    @PostMapping("/user/{userId}")
+    @GetMapping("/user/{userId}")
     fun getUserMark(@PathVariable userId: Long): UserMarkResponse {
         return service.getUserMark(userId)
     }
 
-    @PostMapping("/user/me")
+    @GetMapping("/user/me")
     fun getMark(): UserMarkResponse {
         return service.getUserMark(getPrincipal())
     }

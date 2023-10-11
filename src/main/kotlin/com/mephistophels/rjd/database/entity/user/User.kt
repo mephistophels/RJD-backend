@@ -2,6 +2,7 @@ package com.mephistophels.rjd.database.entity.user
 
 import com.mephistophels.rjd.database.entity.Mark
 import com.mephistophels.rjd.database.entity.Tag
+import com.mephistophels.rjd.database.entity.Ticket
 import com.mephistophels.rjd.database.entity.common.AbstractUserEntity
 import jakarta.persistence.*
 import java.time.LocalDate
