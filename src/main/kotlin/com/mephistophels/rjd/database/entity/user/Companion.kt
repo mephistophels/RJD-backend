@@ -1,5 +1,8 @@
-package com.mephistophels.rjd.database.entity
+package com.mephistophels.rjd.database.entity.user
 
+import com.mephistophels.rjd.database.entity.Mark
+import com.mephistophels.rjd.database.entity.Tag
+import com.mephistophels.rjd.database.entity.common.AbstractUserEntity
 import jakarta.persistence.*
 import java.time.LocalDate
 
@@ -27,7 +30,7 @@ class Companion(
     @Column(name = "avatar", nullable = true)
     var avatar: String? = null
 
-) : AbstractCreatedAtEntity() {
+): AbstractUserEntity() {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "holderId")

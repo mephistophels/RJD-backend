@@ -1,6 +1,6 @@
 package com.mephistophels.rjd.service.impl.auth
 
-import com.mephistophels.rjd.database.entity.User
+import com.mephistophels.rjd.database.entity.user.User
 import com.mephistophels.rjd.security.model.Authority
 import com.mephistophels.rjd.security.JwtParser
 import org.springframework.beans.factory.annotation.Value

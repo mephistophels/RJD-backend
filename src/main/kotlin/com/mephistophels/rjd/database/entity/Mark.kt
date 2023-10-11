@@ -1,5 +1,8 @@
 package com.mephistophels.rjd.database.entity
 
+import com.mephistophels.rjd.database.entity.common.AbstractCreatedAtEntity
+import com.mephistophels.rjd.database.entity.user.Companion
+import com.mephistophels.rjd.database.entity.user.User
 import jakarta.persistence.*
 
 @Entity
@@ -15,14 +18,13 @@ class Mark (
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "recipientId")
-    lateinit var recipient: User
+    var recipient: User? = null
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "companionId")
-    lateinit var companion: Companion
+    var companion: Companion? = null
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "senderId")
     lateinit var sender: User
-
 }

@@ -1,6 +1,6 @@
 package com.mephistophels.rjd.service
 
-import com.mephistophels.rjd.database.entity.User
+import com.mephistophels.rjd.database.entity.user.User
 import com.mephistophels.rjd.model.request.RegistrationRequest
 import com.mephistophels.rjd.model.request.common.PageRequest
 import com.mephistophels.rjd.model.request.user.CompanionRequest
@@ -21,4 +21,5 @@ interface UserService {
     fun createCompanion(request: CompanionRequest): CompanionResponse
     fun uploadCompanionPhoto(companionId: Long, photo: Part): CompanionResponse
     fun deleteCompanion(id: Long): CompanionResponse
+    fun findUserOrCompanionById(id: Long): Any
 }

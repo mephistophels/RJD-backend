@@ -1,6 +1,6 @@
 package com.mephistophels.rjd.service.impl.auth
 
-import com.mephistophels.rjd.database.entity.User
+import com.mephistophels.rjd.database.entity.user.User
 import com.mephistophels.rjd.errors.ApiError
 import com.mephistophels.rjd.mappers.UserMapper
 import com.mephistophels.rjd.model.request.LoginRequest

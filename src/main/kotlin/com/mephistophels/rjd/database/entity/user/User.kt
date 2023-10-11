@@ -1,5 +1,8 @@
-package com.mephistophels.rjd.database.entity
+package com.mephistophels.rjd.database.entity.user
 
+import com.mephistophels.rjd.database.entity.Mark
+import com.mephistophels.rjd.database.entity.Tag
+import com.mephistophels.rjd.database.entity.common.AbstractUserEntity
 import jakarta.persistence.*
 import java.time.LocalDate
 
@@ -25,12 +28,12 @@ class User(
     var patronymic: String? = null,
 
     @Column(name = "birthday", nullable = true)
-    var birthday: LocalDate? = null,
+    var birthday: LocalDate,
 
     @Column(name = "bio", nullable = true)
     var bio: String? = null,
 
-) : AbstractCreatedAtEntity() {
+): AbstractUserEntity() {
 
     @Column(name = "hash", nullable = false)
     var hash: String? = null

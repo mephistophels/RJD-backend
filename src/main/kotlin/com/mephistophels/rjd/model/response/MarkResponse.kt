@@ -1,12 +1,12 @@
 package com.mephistophels.rjd.model.response
 
-import com.mephistophels.rjd.database.entity.MarkRecipient
 
-data class MarkResponse(
+import com.mephistophels.rjd.model.response.user.UserShortResponse
+
+class MarkResponse(
     val mark: Int,
     val message: String,
-    val recipient: MarkRecipient,
-    val customerId: Long,
-    val executorId: Long,
-    val orderId: Long,
+    val sender: UserShortResponse,
+    val recipient: UserShortResponse? = null,
+    val companion: UserShortResponse? = null
 )

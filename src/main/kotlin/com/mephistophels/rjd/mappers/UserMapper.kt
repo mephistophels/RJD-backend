@@ -1,20 +1,21 @@
 package com.mephistophels.rjd.mappers
 
-import com.mephistophels.rjd.database.entity.Companion
-import com.mephistophels.rjd.database.entity.User
+import com.mephistophels.rjd.database.entity.user.Companion
+import com.mephistophels.rjd.database.entity.user.User
 import com.mephistophels.rjd.model.request.RegistrationRequest
 import com.mephistophels.rjd.model.request.user.CompanionRequest
 import com.mephistophels.rjd.model.response.common.PageResponse
-import com.mephistophels.rjd.model.response.user.CompanionResponse
-import com.mephistophels.rjd.model.response.user.UserFullResponse
-import com.mephistophels.rjd.model.response.user.UserMediumResponse
-import com.mephistophels.rjd.model.response.user.UserResponse
+import com.mephistophels.rjd.model.response.user.*
+import com.mephistophels.rjd.service.MarkService
+import org.springframework.context.annotation.Lazy
 import org.springframework.data.domain.Page
 import org.springframework.stereotype.Component
 
 
 @Component
-class UserMapper {
+class UserMapper(
+    @Lazy private val markService: MarkService
+) {
     fun asEntity(request: RegistrationRequest): User {
         return User(
             email = request.email,
@@ -76,6 +77,19 @@ class UserMapper {
             birthday = entity.birthday,
             bio = entity.bio,
             tag = res,
+        )
+    }
+
+    fun asUserShortResponse(entity: User) : UserShortResponse {
+        return UserShortResponse(
+            id = entity.id,
+            createdAt = entity.createdAt,
+            name = entity.name,
+            patronymic = entity.patronymic,
+            surname = entity.surname,
+            birthday = entity.birthday,
+            tag = entity.tag.map { it.tag }.toMutableSet(),
+            mark = markService.getUserMark(entity)
         )
     }
 

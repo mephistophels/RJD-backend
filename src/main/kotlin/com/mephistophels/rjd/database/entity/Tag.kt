@@ -1,5 +1,8 @@
 package com.mephistophels.rjd.database.entity
 
+import com.mephistophels.rjd.database.entity.common.AbstractCreatedAtEntity
+import com.mephistophels.rjd.database.entity.user.Companion
+import com.mephistophels.rjd.database.entity.user.User
 import jakarta.persistence.*
 
 @Entity

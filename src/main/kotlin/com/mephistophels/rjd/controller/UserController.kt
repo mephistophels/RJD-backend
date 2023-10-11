@@ -10,6 +10,7 @@ import com.mephistophels.rjd.service.UserService
 import com.mephistophels.rjd.util.API_VERSION_1
 import com.mephistophels.rjd.util.getPrincipal
 import jakarta.servlet.http.Part
+import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -38,7 +39,7 @@ class UserController(
     }
 
     @PostMapping("/companion")
-    fun createCompanion(request: CompanionRequest): CompanionResponse {
+    fun createCompanion(@Valid request: CompanionRequest): CompanionResponse {
         return service.createCompanion(request)
     }
 

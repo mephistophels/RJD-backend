@@ -1,8 +1,8 @@
 package com.mephistophels.rjd.service.impl.user
 
-import com.mephistophels.rjd.database.entity.Companion
+import com.mephistophels.rjd.database.entity.user.Companion
 import com.mephistophels.rjd.database.entity.Tag
-import com.mephistophels.rjd.database.entity.User
+import com.mephistophels.rjd.database.entity.user.User
 import com.mephistophels.rjd.database.repository.CompanionDao
 import com.mephistophels.rjd.database.repository.TagDao
 import com.mephistophels.rjd.database.repository.UserDao
@@ -27,6 +27,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import java.util.*
+import kotlin.jvm.optionals.getOrNull
 
 @Service
 @Transactional
@@ -41,6 +42,11 @@ class UserServiceImpl(
 
     override fun existByEmail(email: String): Boolean {
         return dao.existsByEmail(email)
+    }
+
+    override fun findUserOrCompanionById(id: Long): Any {
+        return dao.findById(id).getOrNull() ?: companionDao.findById(id).getOrNull()
+            ?: throw ResourceNotFoundException(id, User::class.java)
     }
 
     override fun findEntityByEmail(email: String): User {
@@ -82,7 +88,10 @@ class UserServiceImpl(
 
     private fun findCompanionAndCheckHolder(companionId: Long, holder: User): Companion {
         val companion = findCompanionEntityById(companionId)
-        if (companion.holder.id != holder.id) throw ApiError(status = HttpStatus.BAD_REQUEST, "Нельзя менять чужого попутчика")
+        if (companion.holder.id != holder.id) throw ApiError(
+            status = HttpStatus.BAD_REQUEST,
+            "Нельзя менять чужого попутчика"
+        )
         return companion
     }
 

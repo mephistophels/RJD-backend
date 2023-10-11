@@ -10,7 +10,7 @@ spring:
       access.lifetime: 1  # days
 
   datasource:
-    url: jdbc:postgresql://localhost:5431/RJD?createIfNotExists=true
+    url: jdbc:postgresql://localhost:${DB_PORT:5431}/rjd?createIfNotExists=true
     username: admin
     password: password
 

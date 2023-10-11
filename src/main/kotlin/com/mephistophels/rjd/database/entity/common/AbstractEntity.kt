@@ -1,4 +1,4 @@
-package com.mephistophels.rjd.database.entity
+package com.mephistophels.rjd.database.entity.common
 
 import jakarta.persistence.Column
 import jakarta.persistence.GeneratedValue
