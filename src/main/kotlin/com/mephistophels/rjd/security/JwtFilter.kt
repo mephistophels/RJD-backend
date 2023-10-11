@@ -1,7 +1,7 @@
 package com.mephistophels.rjd.security
 
 import com.mephistophels.rjd.errors.ApiError
-//import com.mephistophels.rjd.errors.ExceptionResolver
+import com.mephistophels.rjd.errors.ExceptionResolver
 import com.mephistophels.rjd.util.API_PUBLIC
 import com.mephistophels.rjd.util.containsAnyPath
 import org.springframework.context.annotation.Lazy
@@ -17,7 +17,7 @@ import jakarta.servlet.http.HttpServletResponse
 class JwtFilter(
     @Lazy
     private val jwtParser: JwtParser,
-//    private val exceptionResolver: ExceptionResolver,
+    private val exceptionResolver: ExceptionResolver,
 ) : OncePerRequestFilter() {
 
     override fun shouldNotFilter(request: HttpServletRequest): Boolean {
@@ -37,7 +37,7 @@ class JwtFilter(
             SecurityContextHolder.getContext().authentication = jwtParser.createAuthToken(header)
             filterChain.doFilter(request, response)
         } catch (exception: ApiError) {
-//            exceptionResolver.resolveException(request, response, exception)
+            exceptionResolver.resolveException(request, response, exception)
         }
     }
 }
