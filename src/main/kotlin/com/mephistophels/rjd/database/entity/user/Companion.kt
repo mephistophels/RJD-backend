@@ -42,4 +42,6 @@ class Companion(
     @OneToMany(mappedBy = "companion", cascade = [CascadeType.ALL])
     var mark: Set<Mark> = HashSet()
 
+    @OneToMany(mappedBy = "companion", cascade = [CascadeType.ALL])
+    var tickets: Set<Ticket> = HashSet()
 }

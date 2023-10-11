@@ -49,4 +49,7 @@ class User(
 
     @OneToMany(mappedBy = "holder", cascade = [CascadeType.ALL])
     var companions: Set<Companion> = HashSet()
+
+    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL])
+    var tickets: Set<Ticket> = HashSet()
 }
