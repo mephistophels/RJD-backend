@@ -30,7 +30,7 @@ import java.util.*
 
 @Service
 @Transactional
-class UserSerxviceImpl(
+class UserServiceImpl(
     private val passwordEncoder: PasswordEncoder,
     private val mapper: UserMapper,
     private val dao: UserDao,
