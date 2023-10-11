@@ -8,6 +8,7 @@ import com.mephistophels.rjd.model.response.user.UserMarkResponse
 import com.mephistophels.rjd.service.MarkService
 import com.mephistophels.rjd.util.API_VERSION_1
 import com.mephistophels.rjd.util.getPrincipal
+import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -21,7 +22,7 @@ class MarkController(
     }
 
     @PostMapping("/user/{userId}")
-    fun createMark(@RequestBody request: MarkRequest, @PathVariable userId: Long): MarkResponse {
+    fun createMark(@Valid @RequestBody request: MarkRequest, @PathVariable userId: Long): MarkResponse {
         return service.createMark(request, userId)
     }
 

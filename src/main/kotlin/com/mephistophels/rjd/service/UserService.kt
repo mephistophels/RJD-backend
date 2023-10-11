@@ -22,4 +22,5 @@ interface UserService {
     fun uploadCompanionPhoto(companionId: Long, photo: Part): CompanionResponse
     fun deleteCompanion(id: Long): CompanionResponse
     fun findUserOrCompanionById(id: Long): Any
+    fun getCompanion(id: Long): CompanionResponse
 }

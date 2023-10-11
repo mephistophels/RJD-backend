@@ -49,6 +49,15 @@ class UserServiceImpl(
             ?: throw ResourceNotFoundException(id, User::class.java)
     }
 
+    private fun findCompanionEntityById(id: Long): Companion {
+        return companionDao.findById(id).orElseThrow { ResourceNotFoundException(id, Companion::class.java) }
+    }
+
+    override fun getCompanion(id: Long): CompanionResponse {
+        val entity = findCompanionEntityById(id)
+        return mapper.asResponse(entity)
+    }
+
     override fun findEntityByEmail(email: String): User {
         return dao.findByEmail(email).orElseThrow { ResourceNotFoundException(email, User::class.java) }
     }
@@ -79,11 +88,6 @@ class UserServiceImpl(
             this.holder = user
         }.also { companionDao.save(it) }
         return mapper.asResponse(companion)
-    }
-
-    private fun findCompanionEntityById(companionId: Long): Companion {
-        return companionDao.findById(companionId)
-            .orElseThrow { ResourceNotFoundException(companionId, Companion::class.java) }
     }
 
     private fun findCompanionAndCheckHolder(companionId: Long, holder: User): Companion {

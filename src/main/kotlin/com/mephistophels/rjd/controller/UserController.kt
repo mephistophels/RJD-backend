@@ -39,13 +39,18 @@ class UserController(
     }
 
     @PostMapping("/companion")
-    fun createCompanion(@Valid request: CompanionRequest): CompanionResponse {
+    fun createCompanion(@Valid @RequestBody request: CompanionRequest): CompanionResponse {
         return service.createCompanion(request)
     }
 
     @PostMapping("/companion/{id}/photo")
     fun uploadCompanionPhoto(@PathVariable id: Long, @RequestPart("photo") photo: Part): CompanionResponse {
         return service.uploadCompanionPhoto(id, photo)
+    }
+
+    @GetMapping("/companion/{id}")
+    fun getCompanion(@PathVariable id: Long): CompanionResponse {
+        return service.getCompanion(id)
     }
 
     @DeleteMapping("/companion/{id}")
