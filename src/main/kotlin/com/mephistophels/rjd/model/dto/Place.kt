@@ -7,6 +7,7 @@ class Place(
 )
 
 class Carriage(
+    var number: Int,
     var places: List<Place>
 )
 

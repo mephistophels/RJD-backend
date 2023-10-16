@@ -22,7 +22,7 @@ class RecommendationMapper(
                 patronymic = user.patronymic,
                 sex = user.sex,
                 birthday = user.birthday,
-                tag = user.tag,
+                tag = user.tag.map { it.tag }.toMutableSet(),
                 mark = markService.getUserMarkForRecommendation(user),
                 questionnaire = user.answers.map { it.answer }
             )
@@ -35,7 +35,7 @@ class RecommendationMapper(
                 sex = user.sex,
                 patronymic = user.patronymic,
                 birthday = user.birthday,
-                tag = user.tag,
+                tag = user.tag.map { it.tag }.toMutableSet(),
                 mark = markService.getUserMarkForRecommendation(user),
                 questionnaire = user.answers.map { it.answer }
             )

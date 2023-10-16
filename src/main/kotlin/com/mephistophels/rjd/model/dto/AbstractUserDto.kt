@@ -1,9 +1,11 @@
 package com.mephistophels.rjd.model.dto
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.mephistophels.rjd.database.entity.Tag
 import com.mephistophels.rjd.model.response.user.UserMarkResponse
 import java.time.LocalDate
 
+@JsonIgnoreProperties("questionnaire", "questionnaireVector", "vector", "isOld")
 class AbstractUserDto(
     var email: String? = null,
     var phone: String? = null,
@@ -13,7 +15,7 @@ class AbstractUserDto(
     var sex: String,
     var patronymic: String? = null,
     var birthday: LocalDate,
-    var tag: Set<Tag> = HashSet(),
+    var tag: Set<String> = HashSet(),
     var mark: UserMarkResponse,
     var questionnaire: List<Int>
 ) {
@@ -22,7 +24,6 @@ class AbstractUserDto(
         vector += (if (sex == "male") 1 else -1) * 2.5
         vector += (LocalDate.now().year - birthday.year) / 100 * 2.0
         vector += mark.mark / 5
-//        vector += 0
         return vector
     }
 

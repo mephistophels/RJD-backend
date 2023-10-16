@@ -25,8 +25,9 @@ class AuthController(
     }
 
     @PostMapping("/registration")
-    fun register(@Valid @RequestBody request: RegistrationRequest, @RequestPart("photo") photo : Part): UserResponse {
+    fun register(@Valid @RequestBody request: RegistrationRequest, @RequestPart("photo") photo: Part? = null): UserResponse {
         val user = authService.register(request)
-        return userService.uploadUserPhoto(user.id, photo)
+        if (photo != null) userService.uploadUserPhoto(user.id, photo)
+        return user
     }
 }

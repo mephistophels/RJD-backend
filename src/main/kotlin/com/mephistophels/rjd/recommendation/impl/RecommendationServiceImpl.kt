@@ -27,7 +27,7 @@ class RecommendationServiceImpl(
         val tickets = ticketService.findAllTickets(request)
         val train = Train(
             (1..8).map { carriageNum ->
-                Carriage((1..36).map { placeNum ->
+                Carriage(carriageNum, (1..36).map { placeNum ->
                     val ticket = tickets.find { it.carriage == carriageNum && it.place == placeNum }
                     if (ticket == null) Place(placeNum, null, 0.0)
                     else {
@@ -55,7 +55,7 @@ class RecommendationServiceImpl(
             for (place in carriage.places) {
                 index += 1
                 if (place.user != null) continue
-                place.rating = result[index]
+                place.rating = (result[index] + 1) / 2
             }
         }
     }
@@ -64,7 +64,7 @@ class RecommendationServiceImpl(
         val rating = mutableListOf<Double>()
         for (carriage in train.carriages) {
             for (place in carriage.places) {
-                rating += if (place.user != null) 0.0
+                rating += if (place.user == null) 0.0
                           else similarity(self.getVector(), place.user!!.getVector())
             }
         }
@@ -75,7 +75,7 @@ class RecommendationServiceImpl(
         val rating = mutableListOf<Double>()
         for (carriage in train.carriages) {
             for (place in carriage.places) {
-                rating += if (place.user != null) 0.0
+                rating += if (place.user == null) 0.0
                 else similarity(self.getQuestionnaireVector(), place.user!!.getQuestionnaireVector())
             }
         }
@@ -90,15 +90,15 @@ class RecommendationServiceImpl(
                 var iCanHelp = 0.0
                 var smdCanHelpToMe = 0.0
                 for (num in getCoupeList(place.number)) {
-                    val user = carriage.places[num].user ?: continue
+                    val user = carriage.places[num - 1].user ?: continue
                     if (self.getQuestionnaireVector().last() > 0 && user.isOld()) iCanHelp = self.getQuestionnaireVector().last()
                     if (self.isOld() && user.getQuestionnaireVector().last() > 0) smdCanHelpToMe = user.getQuestionnaireVector().last()
                 }
                 val delta = if (self.isOld()) 3 else 0
                 for (num in getCoupeList(place.number)) {
-                    var res = if (place.user != null) 0.0
+                    var res = if (place.user == null) 0.0
                               else (iCanHelp + smdCanHelpToMe) * 1.0
-                    if (num % 2 == 1) res += delta
+                    if (num % 2 == 1) res += delta else res -= delta / 2
                     rating += res
                 }
             }
@@ -126,7 +126,7 @@ class RecommendationServiceImpl(
      */
     fun normalize(input: List<Double>): List<Double> {
         if (input.isEmpty()) return input
-        val min = input.filter { it != 0.0 }.minOrNull() ?: 0.0
+        val min = input.filter { it != 0.0 }.minOrNull() ?: 0.0 // .filter { it != 0.0 }
         val max = input.filter { it != 0.0 }.maxOrNull() ?: 0.0
         if (min == max) return List(input.size) { 0.0 }
         return input.map { ((it - min) / (max - min) * 2) - 1 }
