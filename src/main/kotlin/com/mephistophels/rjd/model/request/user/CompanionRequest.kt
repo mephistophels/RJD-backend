@@ -16,4 +16,5 @@ class CompanionRequest(
     val phone: String? = null,
     @field:Size(max = 3000)
     val bio: String? = null,
+    val sex: String
 )

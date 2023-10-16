@@ -8,6 +8,7 @@ import com.mephistophels.rjd.model.response.common.PageResponse
 import com.mephistophels.rjd.model.response.user.CompanionResponse
 import com.mephistophels.rjd.model.response.user.UserFullResponse
 import com.mephistophels.rjd.model.response.user.UserMediumResponse
+import com.mephistophels.rjd.model.response.user.UserResponse
 import jakarta.servlet.http.Part
 
 interface UserService {
@@ -23,4 +24,6 @@ interface UserService {
     fun deleteCompanion(id: Long): CompanionResponse
     fun findUserOrCompanionById(id: Long): Any
     fun getCompanion(id: Long): CompanionResponse
+
+    fun uploadUserPhoto(userId: Long, photo: Part) : UserResponse
 }

@@ -2,6 +2,7 @@ package com.mephistophels.rjd.mappers
 
 import com.mephistophels.rjd.database.entity.user.Companion
 import com.mephistophels.rjd.database.entity.user.User
+import com.mephistophels.rjd.model.request.Questionnaire
 import com.mephistophels.rjd.model.request.RegistrationRequest
 import com.mephistophels.rjd.model.request.user.CompanionRequest
 import com.mephistophels.rjd.model.response.common.PageResponse
@@ -23,18 +24,21 @@ class UserMapper(
             patronymic = request.patronymic,
             surname = request.surname,
             birthday = request.birthday,
-            bio = request.bio,
+            bio = request.questionnaire.bio,
             phone = request.phone,
-            avatar = request.avatar,
-        )
+            sex = request.sex,
+            avatar = null,
+            )
     }
     fun asNullableResponse(entity: User?): UserResponse? {
         return if (entity == null) null else asResponse(entity)
     }
 
     fun asResponse(entity: User): UserResponse {
-        val res = mutableSetOf<String>()
-        for (tag in entity.tag) { res.add(tag.tag) }
+        val resTag = mutableSetOf<String>()
+        val resAns = mutableListOf<Int>()
+        for (tag in entity.tag) { resTag.add(tag.tag) }
+        for (answer in entity.answers) { resAns.add(answer.answer) }
         return UserResponse(
             id = entity.id,
             createdAt = entity.createdAt,
@@ -43,13 +47,21 @@ class UserMapper(
             patronymic = entity.patronymic,
             surname = entity.surname,
             birthday = entity.birthday,
-            tag = res,
+            phone = entity.phone,
+            questionnaire = Questionnaire(
+                bio = entity.bio!!,
+                tags = resTag,
+                answers = resAns,
+            ),
+            avatar = entity.avatar,
         )
     }
 
     fun asUserFullResponse(entity: User) : UserFullResponse {
-        val res = mutableSetOf<String>()
-        for (tag in entity.tag) { res.add(tag.tag) }
+        val resTag = mutableSetOf<String>()
+        val resAns = mutableListOf<Int>()
+        for (tag in entity.tag) { resTag.add(tag.tag) }
+        for (answer in entity.answers) { resAns.add(answer.answer) }
         return UserFullResponse(
             id = entity.id,
             createdAt = entity.createdAt,
@@ -58,15 +70,21 @@ class UserMapper(
             patronymic = entity.patronymic,
             surname = entity.surname,
             birthday = entity.birthday,
-            bio = entity.bio,
-            tag = res,
-
+            phone = entity.phone,
+            questionnaire = Questionnaire(
+                bio = entity.bio!!,
+                tags = resTag,
+                answers = resAns,
+            ),
+            avatar = entity.avatar,
         )
     }
 
     fun asUserMediumResponse(entity: User) : UserMediumResponse {
-        val res = mutableSetOf<String>()
-        for (tag in entity.tag) { res.add(tag.tag) }
+        val resTag = mutableSetOf<String>()
+        val resAns = mutableListOf<Int>()
+        for (tag in entity.tag) { resTag.add(tag.tag) }
+        for (answer in entity.answers) { resAns.add(answer.answer) }
         return UserMediumResponse(
             id = entity.id,
             createdAt = entity.createdAt,
@@ -75,8 +93,13 @@ class UserMapper(
             patronymic = entity.patronymic,
             surname = entity.surname,
             birthday = entity.birthday,
-            bio = entity.bio,
-            tag = res,
+            phone = entity.phone,
+            questionnaire = Questionnaire(
+                bio = entity.bio!!,
+                tags = resTag,
+                answers = resAns,
+            ),
+            avatar = entity.avatar,
         )
     }
 
@@ -118,7 +141,9 @@ class UserMapper(
             surname = request.surname,
             birthday = request.birthday,
             bio = request.bio,
-            phone = request.phone
+            phone = request.phone?:"321",
+            avatar = "",
+            sex = request.sex,
         )
     }
 }

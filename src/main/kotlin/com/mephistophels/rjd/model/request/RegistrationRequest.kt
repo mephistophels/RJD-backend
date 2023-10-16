@@ -8,9 +8,11 @@ import jakarta.validation.constraints.Size
 import org.apache.tika.sax.CleanPhoneText
 
 class RegistrationRequest(
+    val questionnaire: Questionnaire,
     @field:Pattern(regexp = EMAIL_REGEX)
     @field:Size(min = 4, max = 120)
     val email: String,
+    val sex : String,
     @field:Size(min = 8, max = 255)
     val password: String,
     @field:Size(max = 255)
@@ -20,10 +22,6 @@ class RegistrationRequest(
     @field:Size(max = 255)
     val patronymic: String? = null,
     val birthday: LocalDate,
-    @field:Size(max = 3000)
-    var bio: String? = null,
     @field:Size(max = 11)
     var phone: String,
-    var avatar: String,
-    var tag: Set<String>,
 )
