@@ -3,7 +3,6 @@ package com.mephistophels.rjd.model.dto
 import com.mephistophels.rjd.database.entity.Tag
 import com.mephistophels.rjd.model.response.user.UserMarkResponse
 import java.time.LocalDate
-import kotlin.math.sqrt
 
 class AbstractUserDto(
     var email: String? = null,
