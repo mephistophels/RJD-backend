@@ -34,6 +34,7 @@ class AuthServiceImpl(
     @Transactional
     override fun register(request: RegistrationRequest): UserResponse {
         val user = userService.createUser(request)
+
         return mapper.asResponse(user)
     }
 

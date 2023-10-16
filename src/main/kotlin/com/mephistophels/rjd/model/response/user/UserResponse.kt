@@ -1,5 +1,6 @@
 package com.mephistophels.rjd.model.response.user
 
+import com.mephistophels.rjd.model.request.Questionnaire
 import com.mephistophels.rjd.model.response.common.AbstractCreatedAtResponse
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -12,5 +13,7 @@ open class UserResponse(
     val name: String,
     val patronymic: String? = null,
     val birthday: LocalDate? = null,
-    val tag: Set<String>,
+    val phone: String,
+    val questionnaire: Questionnaire,
+    val avatar: String?,
 ): AbstractCreatedAtResponse(id, createdAt)

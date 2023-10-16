@@ -22,6 +22,9 @@ class User(
     @Column(name = "surname", nullable = false)
     var surname: String,
 
+    @Column(name = "sex", nullable = true)
+    var sex: String, // male||female
+
     @Column(name = "name", nullable = false)
     var name: String,
 
@@ -53,4 +56,7 @@ class User(
 
     @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL])
     var tickets: Set<Ticket> = HashSet()
+
+    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL])
+    var answers: List<Answer> = ArrayList()
 }

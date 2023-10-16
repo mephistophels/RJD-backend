@@ -1,5 +1,6 @@
 package com.mephistophels.rjd.model.response.user
 
+import com.mephistophels.rjd.model.request.Questionnaire
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -11,6 +12,7 @@ class UserFullResponse(
     name: String,
     patronymic: String? = null,
     birthday: LocalDate? = null,
-    bio: String? = null,
-    tag: Set<String>
-) : UserMediumResponse(id, createdAt, email, surname, name, patronymic, birthday, bio, tag)
+    phone: String,
+    questionnaire: Questionnaire,
+    avatar: String?,
+) : UserMediumResponse(id, createdAt, email, surname, name, patronymic, birthday, phone, questionnaire, avatar)

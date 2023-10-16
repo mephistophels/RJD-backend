@@ -2,7 +2,9 @@ package com.mephistophels.rjd.service.impl.user
 
 import com.mephistophels.rjd.database.entity.user.Companion
 import com.mephistophels.rjd.database.entity.Tag
+import com.mephistophels.rjd.database.entity.user.Answer
 import com.mephistophels.rjd.database.entity.user.User
+import com.mephistophels.rjd.database.repository.AnswerDao
 import com.mephistophels.rjd.database.repository.CompanionDao
 import com.mephistophels.rjd.database.repository.TagDao
 import com.mephistophels.rjd.database.repository.UserDao
@@ -18,6 +20,7 @@ import com.mephistophels.rjd.model.response.common.PageResponse
 import com.mephistophels.rjd.model.response.user.CompanionResponse
 import com.mephistophels.rjd.model.response.user.UserFullResponse
 import com.mephistophels.rjd.model.response.user.UserMediumResponse
+import com.mephistophels.rjd.model.response.user.UserResponse
 import com.mephistophels.rjd.service.StorageManager
 import com.mephistophels.rjd.service.TicketService
 import com.mephistophels.rjd.service.UserService
@@ -39,7 +42,7 @@ class UserServiceImpl(
     private val companionDao: CompanionDao,
     private val tagDao: TagDao,
     private val storageManager: StorageManager,
-    private val ticketService: TicketService,
+    private val answerDao: AnswerDao,
 ) : UserService {
 
     override fun existByEmail(email: String): Boolean {
@@ -58,6 +61,13 @@ class UserServiceImpl(
     override fun getCompanion(id: Long): CompanionResponse {
         val entity = findCompanionEntityById(id)
         return mapper.asResponse(entity)
+    }
+
+    override fun uploadUserPhoto(userId: Long, photo: Part): UserResponse {
+        val user = findEntityById(userId).apply {
+            this.avatar = storageManager.saveImage(photo, PhotoPath.USER, null)
+        }
+        return mapper.asUserFullResponse(user)
     }
 
     override fun findEntityByEmail(email: String): User {
@@ -124,11 +134,17 @@ class UserServiceImpl(
             hash = passwordEncoder.encode(request.password)
             dao.save(this)
         }
-        for (tag in request.tag) {
+        for (tag in request.questionnaire.tags) {
             tagDao.save(Tag(tag.lowercase(Locale.getDefault())).apply { this.user = user })
+        }
+        for (i in 0 until request.questionnaire.answers.size){
+            answerDao.save(Answer(question = i, answer = request.questionnaire.answers[i]).apply { this.user = user })
         }
         user.apply {
             this.tag = tagDao.findAllByUser(this)
+        }
+        user.apply {
+            this.answers = answerDao.findAllByUser(this)
         }
         return user
     }
