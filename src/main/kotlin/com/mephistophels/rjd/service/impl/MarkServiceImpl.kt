@@ -41,7 +41,7 @@ class MarkServiceImpl(
         val entity = mapper.asEntity(request).apply {
             this.sender = sender
             if (recipient is User) this.recipient = recipient
-            else                   this.companion = recipient as? Companion
+            else this.companion = recipient as? Companion
         }.also { dao.save(it) }
         return mapper.asResponse(entity)
     }
@@ -60,5 +60,23 @@ class MarkServiceImpl(
     override fun getUserMark(userId: Long): UserMarkResponse {
         val user = userService.findEntityById(userId)
         return getUserMark(user)
+    }
+
+    override fun getUserMarkForRecommendation(user: Any): UserMarkResponse {
+        return when (user) {
+            is User -> UserMarkResponse(
+                if (user.receivedMark.isNotEmpty())
+                    user.receivedMark.sumOf { it.mark.toDouble() } / user.receivedMark.size else 0.0,
+                user.receivedMark.size
+            )
+
+            is Companion -> UserMarkResponse(
+                if (user.mark.isNotEmpty())
+                    user.mark.sumOf { it.mark.toDouble() } / user.mark.size else 0.0,
+                user.mark.size
+            )
+
+            else -> TODO("Не User и не Companion")
+        }
     }
 }

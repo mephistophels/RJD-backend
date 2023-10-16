@@ -17,7 +17,7 @@ class User(
     var phone: String,
 
     @Column(name = "avatar")
-    var avatar:String,
+    var avatar: String? = null,
 
     @Column(name = "surname", nullable = false)
     var surname: String,

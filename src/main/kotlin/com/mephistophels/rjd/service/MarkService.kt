@@ -13,4 +13,5 @@ interface MarkService {
     fun getUserMark(userId: Long): UserMarkResponse
     fun getMarksList(userId: Long, request: PageRequest): PageResponse<MarkResponse>
     fun getMark(markId: Long): MarkResponse
+    fun getUserMarkForRecommendation(user: Any): UserMarkResponse
 }

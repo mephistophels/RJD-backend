@@ -13,5 +13,5 @@ data class TicketRequest(
     val place: Int,
     var carriageType: CarriageType,
     val userId: Long,
-    val companionId: Long = -1,
-    )
+    val companionId: Long = -1
+)

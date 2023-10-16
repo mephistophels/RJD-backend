@@ -5,13 +5,16 @@ import com.mephistophels.rjd.database.repository.CompanionDao
 import com.mephistophels.rjd.database.repository.TicketDao
 import com.mephistophels.rjd.database.repository.UserDao
 import com.mephistophels.rjd.mappers.TicketMapper
+import com.mephistophels.rjd.model.request.RecommendationRequest
 import com.mephistophels.rjd.model.request.TicketRequest
 import com.mephistophels.rjd.model.response.TicketResponse
 import com.mephistophels.rjd.service.TicketService
 import com.mephistophels.rjd.service.UserService
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 
 @Service
+@Transactional
 class TicketServiceImpl(
     val dao: TicketDao,
     val mapper: TicketMapper,
@@ -35,5 +38,9 @@ class TicketServiceImpl(
             res.add(mapper.asResponse(ticket))
         }
         return res
+    }
+
+    override fun findAllTickets(request: RecommendationRequest): List<Ticket> {
+        return dao.findAllByDateAndTrainNumber(request.date, request.trainNumber)
     }
 }

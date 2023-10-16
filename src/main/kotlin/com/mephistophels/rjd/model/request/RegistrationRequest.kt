@@ -24,6 +24,6 @@ class RegistrationRequest(
     var bio: String? = null,
     @field:Size(max = 11)
     var phone: String,
-    var avatar: String,
+    var avatar: String? = null,
     var tag: Set<String>,
 )
