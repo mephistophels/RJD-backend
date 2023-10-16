@@ -1,7 +1,6 @@
 package com.mephistophels.rjd.recommendation.impl
 
 import com.mephistophels.rjd.database.entity.Ticket
-import com.mephistophels.rjd.database.entity.user.User
 import com.mephistophels.rjd.mappers.RecommendationMapper
 import com.mephistophels.rjd.model.dto.AbstractUserDto
 import com.mephistophels.rjd.model.dto.Carriage
@@ -47,15 +46,16 @@ class RecommendationServiceImpl(
         val selfDto = mapper.asAbstractUserDto(self)
 
         val byVector = getByUserVector(train, tickets, selfDto)
-
-        val result = byVector.indices.map { byVector[it] }
+        val byByQuestionnaire = getByQuestionnaire(train, tickets, selfDto)
+        val bySelfQualities = getBySelfQualities(train, tickets, selfDto)
+        val result = normalize(byVector.indices.map { byVector[it] + byByQuestionnaire[it] * 2 + bySelfQualities[it] * 1.5 })
 
         var index = -1
         for (carriage in train.carriages) {
             for (place in carriage.places) {
                 index += 1
                 if (place.user != null) continue
-                place.rating += result[index]
+                place.rating = result[index]
             }
         }
     }
@@ -65,42 +65,58 @@ class RecommendationServiceImpl(
         for (carriage in train.carriages) {
             for (place in carriage.places) {
                 rating += if (place.user != null) 0.0
-                          else similarity(self, place)
+                          else similarity(self.getVector(), place.user!!.getVector())
             }
         }
         return normalize(rating)
     }
 
-    private fun getByQuestionnaire(train: Train, tickets: List<Ticket>, self: AbstractUserDto) {
-        val questionnaire = MutableList(9) { 1 }
-        val result = MutableList(questionnaire.size) { 0.0 }
-        for (i in questionnaire.indices) {
-            if (i + 1 in listOf(1, 2, 4, 7)) {
-                result[i] = questionnaire[i] - 2.0
+    private fun getByQuestionnaire(train: Train, tickets: List<Ticket>, self: AbstractUserDto): List<Double> {
+        val rating = mutableListOf<Double>()
+        for (carriage in train.carriages) {
+            for (place in carriage.places) {
+                rating += if (place.user != null) 0.0
+                else similarity(self.getQuestionnaireVector(), place.user!!.getQuestionnaireVector())
             }
-            if (i + 1 in listOf(5, 6, 8)) {
-                result[i] = (if (questionnaire[i] == 1) 1 else questionnaire[i] - 3).toDouble()
-            }
-            if (i + 1 == 3) {
-                result[i] = questionnaire[i] * 2 - 3.0
-            }
-            if (i + 1 == 9) {
-                result[i] = when(questionnaire[i]) {
-                    1 -> -1.0
-                    2 -> 0.5
-                    3 -> 1.0
-                    else -> -0.5
+        }
+        return normalize(rating)
+    }
+
+    private fun getBySelfQualities(train: Train, tickets: List<Ticket>, self: AbstractUserDto): List<Double> {
+        val rating = mutableListOf<Double>()
+        for (carriage in train.carriages) {
+            for (place in carriage.places) {
+                if ((place.number - 1) % 4 != 0) continue
+                var iCanHelp = 0.0
+                var smdCanHelpToMe = 0.0
+                for (num in getCoupeList(place.number)) {
+                    val user = carriage.places[num].user ?: continue
+                    if (self.getQuestionnaireVector().last() > 0 && user.isOld()) iCanHelp = self.getQuestionnaireVector().last()
+                    if (self.isOld() && user.getQuestionnaireVector().last() > 0) smdCanHelpToMe = user.getQuestionnaireVector().last()
+                }
+                val delta = if (self.isOld()) 3 else 0
+                for (num in getCoupeList(place.number)) {
+                    var res = if (place.user != null) 0.0
+                              else (iCanHelp + smdCanHelpToMe) * 1.0
+                    if (num % 2 == 1) res += delta
+                    rating += res
                 }
             }
         }
+        return normalize(rating)
     }
+
+    private fun getCoupeList(place: Int): List<Int> = mutableListOf(
+        ((place - 1) / 4) * 4 + 1,
+        ((place - 1) / 4) * 4 + 2,
+        ((place - 1) / 4) * 4 + 3,
+        ((place - 1) / 4) * 4 + 4,
+    )
 
     /**
      * Euclidean distance
      */
-    private fun similarity(self: AbstractUserDto, place: Place): Double {
-        val a = place.user!!.getVector()
-        val b = self.getVector()
+    private fun similarity(a: List<Double>, b: List<Double>): Double {
         val lst = a.mapIndexed {index, it -> (it - b[index]).pow(2.0) }
         return lst.sum() / lst.count()
     }
@@ -108,7 +124,7 @@ class RecommendationServiceImpl(
     /**
      * Each output element in [-1; 1]
      */
-    fun normalize(input: MutableList<Double>): List<Double> {
+    fun normalize(input: List<Double>): List<Double> {
         if (input.isEmpty()) return input
         val min = input.filter { it != 0.0 }.minOrNull() ?: 0.0
         val max = input.filter { it != 0.0 }.maxOrNull() ?: 0.0

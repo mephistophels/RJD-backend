@@ -20,9 +20,11 @@ class RecommendationMapper(
                 surname = user.surname,
                 name = user.name,
                 patronymic = user.patronymic,
+                sex = user.sex,
                 birthday = user.birthday,
                 tag = user.tag,
-                mark = markService.getUserMarkForRecommendation(user)
+                mark = markService.getUserMarkForRecommendation(user),
+                questionnaire = user.answers.map { it.answer }
             )
             is Companion -> AbstractUserDto(
                 email = null,
@@ -30,10 +32,12 @@ class RecommendationMapper(
                 avatar = user.avatar,
                 surname = user.surname,
                 name = user.name,
+                sex = user.sex,
                 patronymic = user.patronymic,
                 birthday = user.birthday,
                 tag = user.tag,
-                mark = markService.getUserMarkForRecommendation(user)
+                mark = markService.getUserMarkForRecommendation(user),
+                questionnaire = user.answers.map { it.answer }
             )
             else -> TODO("Не User и не Companion")
         }
