@@ -48,7 +48,7 @@ class RecommendationServiceImpl(
         val byVector = getByUserVector(train, tickets, selfDto)
         val byByQuestionnaire = getByQuestionnaire(train, tickets, selfDto)
         val bySelfQualities = getBySelfQualities(train, tickets, selfDto)
-        val result = normalize(byVector.indices.map { byVector[it] + byByQuestionnaire[it] * 2 + bySelfQualities[it] * 1.5 })
+        val result = normalize(byVector.indices.map { byVector[it] * 0.25 + byByQuestionnaire[it] * 2 + bySelfQualities[it] * 1.5 })
 
         var index = -1
         for (carriage in train.carriages) {
@@ -62,23 +62,39 @@ class RecommendationServiceImpl(
 
     private fun getByUserVector(train: Train, tickets: List<Ticket>, self: AbstractUserDto): List<Double> {
         val rating = mutableListOf<Double>()
+        val coupe = mutableListOf<Double>()
         for (carriage in train.carriages) {
             for (place in carriage.places) {
-                rating += if (place.user == null) 0.0
+                coupe += if (place.user == null) 0.0
                           else similarity(self.getVector(), place.user!!.getVector())
+                if ((place.number - 1) % 4 == 3) {
+                    val count = coupe.count { it != 0.0 }
+                    val average = if (count == 0) 0.0 else coupe.sum() / count
+                    rating += MutableList(4) { average }
+                    coupe.clear()
+                }
             }
         }
+        return rating
         return normalize(rating)
     }
 
     private fun getByQuestionnaire(train: Train, tickets: List<Ticket>, self: AbstractUserDto): List<Double> {
         val rating = mutableListOf<Double>()
+        val coupe = mutableListOf<Double>()
         for (carriage in train.carriages) {
             for (place in carriage.places) {
-                rating += if (place.user == null) 0.0
-                else similarity(self.getQuestionnaireVector(), place.user!!.getQuestionnaireVector())
+                coupe += if (place.user == null) 0.0
+                          else similarity(self.getQuestionnaireVector(), place.user!!.getQuestionnaireVector())
+                if ((place.number - 1) % 4 == 3) {
+                    val count = coupe.count { it != 0.0 }
+                    val average = if (count == 0) 0.0 else coupe.sum() / count
+                    rating += MutableList(4) { average }
+                    coupe.clear()
+                }
             }
         }
+        return rating
         return normalize(rating)
     }
 
@@ -94,7 +110,7 @@ class RecommendationServiceImpl(
                     if (self.getQuestionnaireVector().last() > 0 && user.isOld()) iCanHelp = self.getQuestionnaireVector().last()
                     if (self.isOld() && user.getQuestionnaireVector().last() > 0) smdCanHelpToMe = user.getQuestionnaireVector().last()
                 }
-                val delta = if (self.isOld()) 3 else 0
+                val delta = if (self.isOld()) 2 else 0
                 for (num in getCoupeList(place.number)) {
                     var res = if (place.user == null) 0.0
                               else (iCanHelp + smdCanHelpToMe) * 1.0
@@ -103,6 +119,7 @@ class RecommendationServiceImpl(
                 }
             }
         }
+        return rating
         return normalize(rating)
     }
 
